@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  notebook:
+    image: ragnar/app/notebook
+    build:
+      dockerfile: dockerfiles/app-notebook/Dockerfile
+      context: .
+    volumes:
+      - /DataScience/data:/opt/spark/work-dir/data
+      - /DataScience/notebooks:/opt/spark/work-dir/notebooks
+      - /DataScience/app:/opt/spark/work-dir/app
+    ports:
+      - "8888:8888"
+    env_file:
+      - ./app/.env
+
+  kibana:
+    image: kibana:6.5.4
+    ports:
+      - "5601:5601"
+    environment:
+      - elasticsearch.url=http://elasticsearch:9200
+      - NODE_OPTIONS=--max-old-space-size=4096
+
+  elasticsearch:
+    image: elasticsearch:6.5.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
