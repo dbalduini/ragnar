@@ -1,34 +1,26 @@
 FROM ragnar/pyspark
 
-# jar versions
-ARG elasticsearch_version=6.6.0
-ARG hadoop_azure_version=2.7.1
-ARG az_storage_version=2.0.0
+ARG maven_repo=https://repo.maven.apache.org/maven2
 
-# maven jar paths
-ARG central_mvn=http://central.maven.org/maven2
+WORKDIR /tmp
 
-ARG elasticsearch_mvn=${central_mvn}/org/elasticsearch/elasticsearch-hadoop/${elasticsearch_version}
-ARG azure_mvn=${central_mvn}/org/apache/hadoop/hadoop-azure/${hadoop_azure_version}
-ARG azure_storage_mvn=${central_mvn}/com/microsoft/azure/azure-storage/${az_storage_version}
+# install maven
+RUN wget -q https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz && \
+    tar -zxf apache-maven-3.6.3-bin.tar.gz -C /opt
+ENV M2_HOME /opt/apache-maven-3.6.3
+ENV PATH "${M2_HOME}/bin:${PATH}"
 
-# jar definitions
-ARG elasticsearch_jar=elasticsearch-hadoop-${elasticsearch_version}.jar
-ARG azure_jar=hadoop-azure-${hadoop_azure_version}.jar
-ARG az_storage_jar=azure-storage-${az_storage_version}.jar
+# get dependencies
+RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars  \
+    -DgroupId=org.elasticsearch -DartifactId=elasticsearch-hadoop -Dversion=6.6.2 -Dtransitive=false
 
-# add ElasticSearch support
-RUN wget -q ${elasticsearch_mvn}/${elasticsearch_jar} && \
-    mv ${elasticsearch_jar} ${SPARK_HOME}/jars
+RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
+    -DgroupId=org.apache.hadoop -DartifactId=hadoop-azure -Dversion=2.7.7 -Dtransitive=false
 
-# add Azure support
-RUN wget -q ${azure_mvn}/${azure_jar} && \
-    mv ${azure_jar} ${SPARK_HOME}/jars
+RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
+    -DgroupId=com.microsoft.azure -DartifactId=azure-storage -Dversion=2.0.0 -Dtransitive=false
 
-# add Azure BlobStorage support
-RUN wget -q ${azure_storage_mvn}/${az_storage_jar} && \
-    mv ${az_storage_jar} ${SPARK_HOME}/jars
-
+# config pyspark
 ENV PYSPARK_FILES ${PYSPARK_FILES}:/opt/spark/work-dir/app
 ENV PYTHONPATH ${PYTHONPATH}:/opt/spark/work-dir/app
 ENV ENV_FILE staging.env

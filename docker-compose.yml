@@ -8,9 +8,9 @@ services:
       dockerfile: dockerfiles/app-notebook/Dockerfile
       context: .
     volumes:
-      - /DataScience/data:/opt/spark/work-dir/data
-      - /DataScience/notebooks:/opt/spark/work-dir/notebooks
-      - /DataScience/app:/opt/spark/work-dir/app
+      - /ragnar/data:/opt/spark/work-dir/data
+      - /ragnar/notebooks:/opt/spark/work-dir/notebooks
+      - /ragnar/app:/opt/spark/work-dir/app
     ports:
       - "8888:8888"
     env_file:

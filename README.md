@@ -48,6 +48,12 @@ After activating the virtual env, install pip requirements to run linter and tes
 pip install -r requirements.txt
 ```
 
+To leave the virtualenv:
+
+```
+deactivate
+```
+
 ## Code linter
 
 ```
@@ -127,6 +133,26 @@ Running Spark (Python) in interactive-mode.
 ```
 docker run --rm -it --entrypoint "/bin/bash" ragnar/pyspark
 ```
+
+## F.A.Q
+
+### How to share volume on windows docker-machine ?
+
+Share the hole project path with the VirtualBox.
+
+This will let we access the folders inside the ragnar project (eg: /ragnar/notebooks).
+
+```
+docker-machine stop
+
+vboxmanage sharedfolder add default --name "ragnar" --hostpath "D:\Projetos\ragnar" --automount
+
+docker-machine start
+```
+
+### Cant access my services on localhost
+
+If you are using the docker-machine, you need to replace the localhost for the virtual machine ip (eg: 192.168.99.100).
 
 --------------------------------
 

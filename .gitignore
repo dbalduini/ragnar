@@ -1,5 +1,2 @@
-# IDE
-.vscode
-
-# Folders
-data
+.vscode/
+**/.ipynb_checkpoints

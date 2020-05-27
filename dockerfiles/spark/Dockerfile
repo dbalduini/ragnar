@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-ARG spark_version=spark-2.4.1
+ARG spark_version=spark-2.4.5
 ARG spark_dir=${spark_version}-bin-hadoop2.7
 ARG spark_mirror=http://ftp.unicamp.br/pub/apache/spark/${spark_version}/${spark_dir}.tgz
 
