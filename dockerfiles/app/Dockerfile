@@ -11,13 +11,13 @@ ENV M2_HOME /opt/apache-maven-3.6.3
 ENV PATH "${M2_HOME}/bin:${PATH}"
 
 # get dependencies
-RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars  \
+RUN mvn dependency:get -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars  \
     -DgroupId=org.elasticsearch -DartifactId=elasticsearch-hadoop -Dversion=6.6.2 -Dtransitive=false
 
-RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
-    -DgroupId=org.apache.hadoop -DartifactId=hadoop-azure -Dversion=2.7.7 -Dtransitive=false
+RUN mvn dependency:get -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
+    -DgroupId=org.apache.hadoop -DartifactId=hadoop-azure -Dversion=2.7.0 -Dtransitive=false
 
-RUN mvn dependency:get -q -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
+RUN mvn dependency:get -DremoteRepositories=${maven_repo} -Ddest=${SPARK_HOME}/jars \
     -DgroupId=com.microsoft.azure -DartifactId=azure-storage -Dversion=2.0.0 -Dtransitive=false
 
 # config pyspark

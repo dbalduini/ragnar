@@ -154,6 +154,11 @@ docker-machine start
 
 If you are using the docker-machine, you need to replace the localhost for the virtual machine ip (eg: 192.168.99.100).
 
+
+```
+./bin/pyspark --packages org.apache.spark:spark-avro_2.11:2.4.4
+```
+
 --------------------------------
 
 ## External Resources
